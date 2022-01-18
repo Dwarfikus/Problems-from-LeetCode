@@ -1,0 +1,25 @@
+/**
+ * @param {string[]} paths
+ * @return {string[][]}
+ */
+var findDuplicate = function(paths) {
+    let content = new Map();
+    for(let path of paths) {
+        let elems = path.split(' '),
+            size  = elems.length;
+        for(let i=1; i<size; i++) {
+            let name = elems[i].slice(0, elems[i].indexOf('(')),
+                text = elems[i].slice(elems[i].indexOf('(')+1);
+            if( content.has(text) ) content.set(text, content.get(text)+' '+elems[0]+'/'+name);
+            else content.set(text, elems[0]+'/'+name);
+        }
+    }
+    
+    let result = [];
+    for(let array of content.values()) {
+        let duplicate = array.split(' ');
+        if( duplicate.length == 1 ) continue;
+        result.push(duplicate);
+    }
+    return result;
+};
