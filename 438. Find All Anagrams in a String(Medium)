@@ -1,0 +1,34 @@
+/**
+ * @param {string} s
+ * @param {string} p
+ * @return {number[]}
+ */
+var findAnagrams = function(s, p) {
+    let stAn = new Map(), an = new Map(), storage = [], ans = [];
+    if( s.length < p.length ) return [];
+    //create Map {'letter': amount} from p and the first element Map for storage
+    for(let i=0; i<p.length; i++) {
+        stAn.set(p[i], ( stAn.has(p[i]) ? stAn.get(p[i])+1 : 1 ));
+        an.set(s[i], ( an.has(s[i]) ? an.get(s[i])+1 : 1 ));
+    }
+    //make an array of Maps with letters and their amounts
+    storage.push(an);
+    for(let i=1; i<=s.length-p.length; i++) {
+        let curAn = new Map(an);
+        curAn.set(s[i-1], curAn.get(s[i-1])-1);
+        if( !(curAn.get(s[i-1])) ) curAn.delete(s[i-1]);
+        curAn.set(s[i+p.length-1], ( curAn.has(s[i+p.length-1]) ? curAn.get(s[i+p.length-1])+1 : 1 ));
+        storage.push(curAn);
+        an = curAn;
+    }
+    //compare Map in storage[i] with our start anagram
+    for(let i=0; i<storage.length; i++) {
+        if( storage[i].size != stAn.size ) continue;
+        let correct = true;
+        for(let [key, value] of storage[i]) {
+            if( !(stAn.has(key) && stAn.get(key) == value) ) { correct = false; break; }
+        }
+        if( correct ) ans.push(i);
+    }
+    return ans;
+};
