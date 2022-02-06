@@ -1,0 +1,29 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+//remove thrice-appearing duplicates from array, changing a[i] with a[i+shift] which is non-duplicate
+//time usage: O(n), memory usage: O(1)
+var removeDuplicates = function(nums) {
+    let k = 0, prev = nums[0], count = 0, shift = 0;
+    for(let i = 0; i < nums.length; i++) {
+        if( i+shift == nums.length ) break;
+        else if( nums[i+shift] == prev ) {
+            if( count == 2 && i+shift+1 != nums.length ) {
+                nums[i] = nums[i+shift+1]
+                shift++;
+                i--;
+            } else if( count < 2 ) {
+                count++;
+                k++;
+                nums[i] = nums[i+shift];
+            }
+        } else {
+            k++
+            count   = 1;
+            prev    = nums[i+shift];
+            nums[i] = nums[i+shift];
+        }
+    }
+    return k;
+};
