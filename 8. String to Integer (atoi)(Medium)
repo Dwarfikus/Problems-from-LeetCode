@@ -1,0 +1,29 @@
+/**
+ * @param {string} s
+ * @return {number}
+ */
+//this function simulate "atoi" in C++ (parseInt in JS)
+var myAtoi = function(s) {
+    let res = '0', i, minus = false;
+    //deleting all spaces in the beginning and initializing the sign if exists
+    for(i = 0; i < s.length; i++) {
+        if( s[i] == ' ' ) continue;
+        else if( s[i] == '-' ) {
+            minus = true;
+            i++;
+        } else if( s[i] == '+' ) i++;
+        break;
+    }
+    //construct the number in interval [-2^31, 2^31-1]
+    for(; i < s.length; i++) {
+        if( s[i] >= '0' && s[i] <= '9' ) {
+            if( s[i] == '0' && res == '0' ) continue;
+            else if( res == '0' ) res = s[i];
+            else res += s[i];
+        } else break;
+    }
+    res = ( minus ) ? Number('-'+res) : Number(res);
+    res = ( res > Math.pow(2, 31)-1 ) ? Math.pow(2, 31)-1 : res;
+    res = ( res < Math.pow(-2, 31) ) ? Math.pow(-2, 31) : res;
+    return res;
+};
